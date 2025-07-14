@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delivery Challan (DC) Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+  <form id="dcForm" class="p-4 rounded shadow text-white needs-validation" style="background-color: #018197;" novalidate>
+    <h4 class="mb-4 fw-bold">New Delivery Challan (DC)</h4>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="dcNumber" class="form-label text-white">DC Number</label>
+        <input type="text" class="form-control" id="dcNumber" name="dcNumber" placeholder="Enter DC Number" required>
+        <div class="invalid-feedback">Please enter DC Number.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="dcDate" class="form-label text-white">Date</label>
+        <input type="date" class="form-control" id="dcDate" name="dcDate" required>
+        <div class="invalid-feedback">Please select a date.</div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="toAddress" class="form-label text-white">To Address</label>
+      <textarea class="form-control" id="toAddress" name="toAddress" rows="3" placeholder="Enter recipient address" required></textarea>
+      <div class="invalid-feedback">Please enter the recipient address.</div>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label text-white">Description</label>
+      <textarea class="form-control" id="description" name="description" rows="2" placeholder="Enter Description" required></textarea>
+      <div class="invalid-feedback">Please enter the description.</div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="designNo" class="form-label text-white">Design No.</label>
+        <input type="text" class="form-control" id="designNo" name="designNo" placeholder="Enter Design No." required>
+        <div class="invalid-feedback">Please enter Design No.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="quality" class="form-label text-white">Quality</label>
+        <input type="text" class="form-control" id="quality" name="quality" placeholder="Enter Quality" required>
+        <div class="invalid-feedback">Please enter Quality.</div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="pcsCount" class="form-label text-white">No. of Pcs/Rolls</label>
+        <input type="number" class="form-control" id="pcsCount" name="pcsCount" min="1" value="1" required>
+        <div class="invalid-feedback">Please enter number of Pcs/Rolls.</div>
+      </div>
+    </div>
+    <div class="table-responsive mb-3">
+      <table class="table table-bordered table-striped bg-white text-dark align-middle" id="pcsTable">
+        <thead class="table-light">
+          <tr>
+            <th style="width: 5%">S. No</th>
+            <th style="width: 20%">Loom No</th>
+            <th colspan="2" style="width: 30%">Meters</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th style="width: 15%">Kg (Integer)</th>
+            <th style="width: 15%">Cm (Decimal)</th>
+          </tr>
+        </thead>
+        <tbody id="pcsTableBody">
+          <!-- Dynamic rows go here -->
+        </tbody>
+      </table>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="totalMeters" class="form-label text-white fw-bold">Total Meters</label>
+        <input type="text" class="form-control" id="totalMeters" name="totalMeters" placeholder="Total Meters" disabled>
+      </div>
+      <div class="col-md-6">
+        <label for="vehicleNo" class="form-label text-white">Vehicle No.</label>
+        <input type="text" class="form-control" id="vehicleNo" name="vehicleNo" placeholder="Enter Vehicle No." required>
+        <div class="invalid-feedback">Please enter Vehicle No.</div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end mt-4">
+      <button type="submit" class="btn btn-outline-light">Submit DC</button>
+    </div>
+  </form>
+
+<script>
+// Helper to create table rows
+function createPcsRows(count) {
+  let rows = '';
+  for (let i = 1; i <= count; i++) {
+    rows += `<tr>
+      <td><input type="text" class="form-control-plaintext text-center" value="${i}" readonly></td>
+      <td><input type="text" class="form-control loom-no" name="loomNo${i}" required></td>
+      <td><input type="number" class="form-control kg" name="kg${i}" min="0" value="0" required></td>
+      <td><input type="number" class="form-control cm" name="cm${i}" min="0" max="99" value="0" required></td>
+    </tr>`;
+  }
+  return rows;
+}
+
+function updatePcsTable() {
+  const count = parseInt(document.getElementById('pcsCount').value) || 1;
+  document.getElementById('pcsTableBody').innerHTML = createPcsRows(count);
+  attachMeterListeners();
+  calculateTotalMeters();
+}
+
+function calculateTotalMeters() {
+  let total = 0;
+  const kgInputs = document.querySelectorAll('.kg');
+  const cmInputs = document.querySelectorAll('.cm');
+  for (let i = 0; i < kgInputs.length; i++) {
+    const kg = parseInt(kgInputs[i].value) || 0;
+    const cm = parseInt(cmInputs[i].value) || 0;
+    total += kg + (cm / 100);
+  }
+  document.getElementById('totalMeters').value = total.toFixed(2);
+}
+
+function attachMeterListeners() {
+  const kgInputs = document.querySelectorAll('.kg');
+  const cmInputs = document.querySelectorAll('.cm');
+  kgInputs.forEach(input => input.addEventListener('input', calculateTotalMeters));
+  cmInputs.forEach(input => input.addEventListener('input', calculateTotalMeters));
+}
+
+document.getElementById('pcsCount').addEventListener('input', updatePcsTable);
+window.addEventListener('DOMContentLoaded', () => {
+  updatePcsTable();
+});
+
+// Bootstrap 5 custom validation
+(function () {
+  'use strict';
+  var form = document.getElementById('dcForm');
+  form.addEventListener('submit', function (event) {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    form.classList.add('was-validated');
+  }, false);
+})();
+</script>
+
+</body>
+</html>

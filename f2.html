@@ -28,19 +28,14 @@
         <div class="position-relative p-4 text-white rounded shadow" style="background-color: #039ab4;">
           <h4>Orders</h4>
           <p>Explore Orders</p>
-          <button class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOrders">
-            Open Orders
+          <button class="btn btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#ordersCollapse">
+            View Orders
           </button>
-
-          <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasOrders">
-            <div class="offcanvas-header">
-              <h5 class="offcanvas-title">Orders</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-            </div>
-            <div class="offcanvas-body">
-              <ul class="list-group">
-                <li class="list-group-item"><a href="#">New Order</a></li>
-                <li class="list-group-item"><a href="#">View All</a></li>
+          <div class="collapse mt-3" id="ordersCollapse">
+            <div class="card card-body bg-light text-dark">
+              <ul class="list-unstyled">
+                <li><a href="#" class="text-decoration-none">New Order</a></li>
+                <li><a href="#" class="text-decoration-none">View All</a></li>
               </ul>
             </div>
           </div>
@@ -56,10 +51,9 @@
           </button>
           <div class="collapse mt-3" id="progressCollapse">
             <div class="card card-body bg-light text-dark">
-              <p>Track your current order status, ongoing work, and shipment stages.</p>
-              <ul>
-                <li><a href="#">Ongoing Orders</a></li>
-                <li><a href="#">Completed Orders</a></li>
+              <ul class="list-unstyled">
+                <li><a href="#" class="text-decoration-none">Ongoing Orders</a></li>
+                <li><a href="#" class="text-decoration-none">Completed Orders</a></li>
               </ul>
             </div>
           </div>
@@ -68,7 +62,6 @@
     </div>
 
     <div class="row g-4 m-4 justify-content-center">
-      <!-- Bills -->
       <div class="col-md-4">
         <div class="position-relative p-4 text-white rounded shadow" style="background-color: #039ab4;">
           <h4>Bills</h4>
@@ -100,7 +93,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </body>
